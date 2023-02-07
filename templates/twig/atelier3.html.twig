@@ -1,0 +1,43 @@
+{% for t in f %}
+    {{t.ref}}
+    {{t.Titre}}
+
+    {% if t.Titre starts with 'Syf' %}
+    formation sf
+    {% endif %}
+    {#
+    {% if t.nb_participants>0 %}
+<input type='submit' value='inscription'>
+    {% endif %}
+    #}
+{% endfor %}
+
+
+
+{% for t in f %}
+    {{t.ref}}
+    {{t.Titre}}
+
+    {% else %}
+    tableau vide
+{% endfor %}
+<hr>
+nb formations:
+
+{{f|length}}
+<hr>
+nb participants:
+{% set nbt=0 %}
+{% for t in f %}
+    {% set nbt=nbt+t.nb_participants %}
+{% endfor %}
+nb participants egale à = {{nbt}}
+<hr>
+un lien detail devant chaque formation
+
+{% for t in f %}
+    {{t.ref}}
+    {{t.Titre}}
+
+    <a href="{{path('detail22',{'id':t.ref})}}">detail</a>
+{% endfor %}
