@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,5 +27,26 @@ class ProductController extends AbstractController
         return $this->render('product/products.html.twig', [
             'p' => $products,
         ]);
+    }
+    #[Route('/remove/{id}', name: 'remove')]
+    public function remove(ManagerRegistry $mg,$id,ProductRepository $repo): Response
+    {
+        $product=$repo->find($id);
+        $em=$mg->getManager();
+        $em->remove($product);
+        $em->flush();
+               
+        return new Response('removed');
+    }
+
+    #[Route('/delete/{id}', name: 'delete')]
+    public function delete(ManagerRegistry $mg,Product $p): Response
+    {
+       
+        $em=$mg->getManager();
+        $em->remove($p);
+        $em->flush();
+               
+        return new Response('removed');
     }
 }
