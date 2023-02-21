@@ -62,6 +62,7 @@ class ProductController extends AbstractController
       
       if($f->isSubmitted()){
         //dd($req);
+        $p->setDate(new \DateTimeImmutable('now'));
       $em=$mr->getManager();
       $em->persist($p);
       $em->flush();
@@ -72,4 +73,27 @@ class ProductController extends AbstractController
     ]);
       
     }
+    #[Route('/updateProduct/{id}', name: 'updateProduct')]
+    public function updateProduct(ManagerRegistry $mr, Request $req,$id)
+    {
+      //$p=new Product(); 
+      $p=$mr->getRepository(Product::class)->find($id);
+
+      $f=$this->createForm(ProductType::class,$p);
+      $f->handleRequest($req);
+      
+      if($f->isSubmitted()){
+        //dd($req);
+        $p->setDate(new \DateTimeImmutable('now'));
+      $em=$mr->getManager();
+     // $em->persist($p);
+      $em->flush();
+      return $this->redirectToRoute('fetchProduct');
+    }
+    return $this->renderForm('product/addProduct.html.twig', [
+        'for' => $f,
+    ]);
+      
+    }
+    
 }
