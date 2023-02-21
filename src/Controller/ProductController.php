@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -48,5 +50,26 @@ class ProductController extends AbstractController
         $em->flush();
                
         return new Response('removed');
+    }
+
+    #[Route('/addProduct', name: 'addProduct')]
+    public function addProduct(ManagerRegistry $mr, Request $req)
+    {
+      $p=new Product(); 
+
+      $f=$this->createForm(ProductType::class,$p);
+      $f->handleRequest($req);
+      
+      if($f->isSubmitted()){
+        //dd($req);
+      $em=$mr->getManager();
+      $em->persist($p);
+      $em->flush();
+      return $this->redirectToRoute('fetchProduct');
+    }
+    return $this->render('product/addproduct.html.twig', [
+        'for' => $f->createView(),
+    ]);
+      
     }
 }
