@@ -11,7 +11,7 @@ class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column ]
     private ?int $ref = null;
 
     #[ORM\Column(length: 255)]
@@ -19,6 +19,9 @@ class Product
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Category $cat = null;
 
     public function getref(): ?int
     {
@@ -45,6 +48,18 @@ class Product
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getCat(): ?Category
+    {
+        return $this->cat;
+    }
+
+    public function setCat(?Category $cat): self
+    {
+        $this->cat = $cat;
 
         return $this;
     }
