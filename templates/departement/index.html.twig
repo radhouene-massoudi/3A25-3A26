@@ -1,0 +1,5 @@
+{% for dep in departments%}
+{{dep.ref}}
+{{dep.name}}
+<a href="{{path('addC',{'iddep':dep.ref})}}"> add compture<a/>
+{% endfor %}
