@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,5 +96,33 @@ class ProductController extends AbstractController
     ]);
       
     }
-    
+
+    #[Route('/selectALL', name: 'selectALL')]
+    public function findAllFromProduct(EntityManagerInterface $em)
+    {
+        /*req sql select * from product
+        $req=$em->createQuery('select p.name,c.name t from App\Entity\Product p join p.cat c');
+        $result=$req->getResult();
+        dd($result);
+
+        $req=$em->createQuery('select count(p) from App\Entity\Product p join p.cat c');
+        $result=$req->getSingleScalarResult();
+        dd($result);*/
+
+        $req=$em->createQuery("select p.name,c.name t from App\Entity\Product p join p.cat c where c.name=?1 ");
+       $req->setParameter('1','tv');
+        $result=$req->getResult();
+        dd($result);
+    }
+
+    #[Route('/myfindall', name: 'myfindall')]
+    public function myfindall(ProductRepository $repo)
+    {
+
+        $result=$repo->findByCategoryQB('tv');
+        //$result=$repo->findAllByQB();
+       // $result=$repo->findByCategory('mobile');
+//$result=$repo->myFindAll();
+dd($result);
+    }
 }
